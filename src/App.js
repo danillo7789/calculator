@@ -70,15 +70,22 @@ const App = () => {
     setCalc({
       ...calc,
       sign: value,
-      res: !calc.res && calc.num ? calc.num : calc.res,
+      res:
+        !calc.res && calc.num
+          ? calc.num
+          : calc.res && calc.num && calc.sign
+          ? toLocaleString(
+            math(
+              Number(removeSpaces(calc.res)),
+              Number(removeSpaces(calc.num)),
+              calc.sign)
+          )
+          : calc.res,
       num: 0,
     });
   };
 
-  const equalsClickHandler = () => {
-
-    if (calc.sign && calc.num) {
-      const math = (a, b, sign) =>
+  const math = (a, b, sign) =>
         sign === "+"
           ? a + b
           : sign === "-"
@@ -87,6 +94,9 @@ const App = () => {
               ? a * b
               : a / b;
 
+  const equalsClickHandler = () => {
+
+    if (calc.sign && calc.num) {      
       setCalc({
         ...calc,
         res:
